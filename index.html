@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Diagnóstico da Aurora · Creators Guzman</title>
+<meta name="robots" content="noindex,nofollow" />
+<meta name="description" content="Oito minutos marcando o que a sua assistente vai fazer. Sem escrever nada." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fdfdfd; --ink:#202124; --muted:rgba(32,33,36,.58); --soft-ink:rgba(32,33,36,.4);
+    --line:#e9e9e9; --line-strong:rgba(32,33,36,.12); --soft:#f4f4f4;
+    --accent:#07C42C; --teal:#4A8FAA; --off:#b9b9b9;
+    --ease:cubic-bezier(0,0,.3642,1);
+    font-family:'Outfit',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--muted)}
+  body{font-size:15px;line-height:170%;-webkit-font-smoothing:antialiased;padding-bottom:96px}
+  h1,h2,h3{font-family:'Outfit',sans-serif;color:var(--ink);line-height:115%;margin:0;font-weight:600}
+  b,strong{color:var(--ink);font-weight:600}
+  .wrap{max-width:820px;margin:0 auto;padding:0 20px 60px}
+  .eyebrow{display:inline-flex;align-items:center;gap:10px;color:var(--accent);
+    text-transform:uppercase;letter-spacing:2.5px;font-size:11px;font-weight:600;margin-bottom:20px}
+  .eyebrow .sq{width:9px;height:9px;background:var(--accent)}
+  .mono{font-family:'JetBrains Mono',monospace}
+
+  header.hero{padding:56px 0 26px}
+  header.hero h1{font-size:48px;letter-spacing:-1px}
+  header.hero h1 .thin{font-weight:200;color:var(--soft-ink);display:block}
+  header.hero .lead{max-width:52ch;margin:20px 0 0;font-size:17px;line-height:165%}
+  .promise{border-left:3px solid var(--accent);background:var(--soft);padding:16px 20px;margin-top:22px;font-size:15px}
+  .divider{position:relative;width:100%;height:1px;background:var(--line);margin:0}
+  .divider:before,.divider:after{content:"";position:absolute;bottom:-3px;width:7px;height:7px;background:var(--accent);border-radius:50%}
+  .divider:before{left:0}.divider:after{right:0}
+
+  section.blk{padding:44px 0 0}
+  .sec-title{display:flex;align-items:center;gap:13px;margin-bottom:10px}
+  .sec-title .n{width:36px;height:36px;flex:none;background:var(--ink);color:#fff;display:grid;place-items:center;font-weight:700;font-size:14px}
+  .sec-title.accentn .n{background:var(--accent)}
+  .sec-title h2{font-size:26px}
+  .sec-sub{font-size:15px;max-width:62ch;margin:0 0 24px 49px}
+  @media(max-width:680px){.sec-sub{margin-left:0}}
+
+  .quotes{border-left:3px solid var(--accent);background:var(--soft);padding:16px 20px;margin:0 0 18px}
+  .quotes q{display:block;color:var(--ink);font-size:16px;margin-bottom:8px}
+  .quotes q:last-child{margin-bottom:0}
+  .quotes q:before{content:"“"}.quotes q:after{content:"”"}
+
+  /* perguntas */
+  .q{border-top:1px solid var(--line);padding:20px 0}
+  .q:first-child{border-top:0}
+  .qlabel{color:var(--ink);font-size:16px;font-weight:600;margin:0}
+  .qdesc{margin:4px 0 0;font-size:14px;color:var(--muted)}
+  .opts{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+  .opt{font:inherit;font-size:14px;color:var(--ink);background:#fff;border:1px solid var(--line-strong);
+    padding:9px 14px;cursor:pointer;transition:.15s var(--ease)}
+  .opt:hover{border-color:var(--ink)}
+  .opt[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+
+  /* catalogo */
+  .area{margin-bottom:26px}
+  .areah{font-size:13px;text-transform:uppercase;letter-spacing:2px;color:var(--teal);font-weight:700;
+    padding-bottom:8px;border-bottom:1px solid var(--line)}
+  .item{display:grid;grid-template-columns:1fr auto;gap:10px 18px;align-items:center;
+    padding:13px 0;border-bottom:1px solid var(--line)}
+  .ilbl{color:var(--ink);font-size:15.5px;line-height:150%}
+  .seg{display:flex;gap:6px;flex:none}
+  .sg{font:inherit;font-size:13px;color:var(--muted);background:#fff;border:1px solid var(--line-strong);
+    padding:8px 12px;cursor:pointer;white-space:nowrap;transition:.15s var(--ease)}
+  .sg:hover{border-color:var(--ink);color:var(--ink)}
+  .sg.ag[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+  .sg.dp[aria-pressed="true"]{background:var(--teal);border-color:var(--teal);color:#fff;font-weight:600}
+  .sg.no[aria-pressed="true"]{background:var(--off);border-color:var(--off);color:#fff;font-weight:600}
+  @media(max-width:680px){
+    .item{grid-template-columns:1fr}
+    .seg{width:100%}
+    .sg{flex:1;text-align:center;padding:11px 4px}
+  }
+
+  textarea{width:100%;font:inherit;font-size:15px;color:var(--ink);background:#fff;
+    border:1px solid var(--line-strong);padding:12px 14px;margin-top:12px;resize:vertical;min-height:96px}
+  textarea:focus,.opt:focus-visible,.sg:focus-visible,button:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+
+  /* barra fixa */
+  .bar{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line-strong);
+    padding:12px 20px;display:flex;align-items:center;gap:14px;justify-content:space-between;z-index:9;
+    box-shadow:0 -6px 20px rgba(32,33,36,.06)}
+  .bar .cnt{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);line-height:1.4}
+  .bar .cnt b{color:var(--ink)}
+  .bar .acts{display:flex;gap:8px;flex:none}
+  .btn{font:inherit;font-size:14px;font-weight:600;padding:12px 18px;cursor:pointer;border:1px solid var(--line-strong);
+    background:#fff;color:var(--ink);transition:.15s var(--ease)}
+  .btn:hover{border-color:var(--ink)}
+  .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+  .btn.primary:hover{filter:brightness(108%)}
+  @media(max-width:560px){
+    .bar{flex-direction:column;align-items:stretch;gap:8px;padding:10px 14px}
+    .bar .acts{width:100%}
+    .btn{flex:1}
+    .bar .cnt{text-align:center}
+  }
+
+  .done{border-left:3px solid var(--teal);background:#f2f7fa;padding:16px 20px;margin-top:26px;font-size:15px}
+  #out{display:none;width:100%;min-height:220px;font-family:'JetBrains Mono',monospace;font-size:12px;margin-top:14px}
+  footer{margin-top:50px;padding-top:20px;border-top:1px solid var(--line);
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;
+    font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <span class="eyebrow"><span class="sq"></span> V3 Nexus · Diagnóstico</span>
+    <h1>Sua assistente <span class="thin">começa a existir aqui</span></h1>
+    <p class="lead">Amanda, antes de eu construir a Aurora, preciso saber o que ela vai fazer no seu dia. Você não escreve quase nada. É só marcar.</p>
+    <div class="promise"><b>Leitura de 1 minuto. Marcação de 8.</b> Dá para fazer do celular, com o dedo, e parar no meio que ele guarda o que você já marcou.</div>
+  </header>
+  <div class="divider"></div>
+
+  <section class="blk">
+    <div class="sec-title"><div class="n">01</div><h2>O que você me disse</h2></div>
+    <div class="quotes">
+      <q>Quero dar comando pelo WhatsApp</q>
+      <q>Quero que ela tenha acesso e-mail, WhatsApp, Instagram, tiktok</q>
+      <q>ele não guarda memória, e quando tenho que refazer ele não lembra</q>
+    </div>
+    <p>A última frase é o problema inteiro, e é ela que a Aurora resolve. Só que "acesso a tudo" quer dizer coisas de tamanhos muito diferentes. As marcações abaixo separam o que você quer <b>agora</b> do que pode esperar, e é isso que define o que eu construo primeiro.</p>
+  </section>
+
+  <section class="blk">
+    <div class="sec-title accentn"><div class="n">02</div><h2>O que você já tem</h2></div>
+    <p class="sec-sub">Doze toques. É o que me diz o que é possível ligar na sua operação.</p>
+    <div class="q" data-multi="1"><p class="qlabel">Onde a sua operação acontece hoje?</p><p class="qdesc">Marque tudo que você usa.</p><div class="opts"><button type="button" class="opt" data-q="a1" data-v="WhatsApp">WhatsApp</button><button type="button" class="opt" data-q="a1" data-v="Instagram">Instagram</button><button type="button" class="opt" data-q="a1" data-v="TikTok">TikTok</button><button type="button" class="opt" data-q="a1" data-v="E-mail">E-mail</button><button type="button" class="opt" data-q="a1" data-v="Planilha">Planilha</button><button type="button" class="opt" data-q="a1" data-v="Aplicativo de tarefas">Aplicativo de tarefas</button><button type="button" class="opt" data-q="a1" data-v="Caderno ou papel">Caderno ou papel</button><button type="button" class="opt" data-q="a1" data-v="Só na minha cabeça">Só na minha cabeça</button></div></div>
+<div class="q" data-multi="0"><p class="qlabel">Seu e-mail principal é qual?</p><div class="opts"><button type="button" class="opt" data-q="a2" data-v="Gmail">Gmail</button><button type="button" class="opt" data-q="a2" data-v="Outlook ou Hotmail">Outlook ou Hotmail</button><button type="button" class="opt" data-q="a2" data-v="Outro">Outro</button><button type="button" class="opt" data-q="a2" data-v="Quase não uso e-mail">Quase não uso e-mail</button></div></div>
+<div class="q" data-multi="0"><p class="qlabel">Você usa Google Agenda?</p><div class="opts"><button type="button" class="opt" data-q="a3" data-v="Uso todo dia">Uso todo dia</button><button type="button" class="opt" data-q="a3" data-v="Uso de vez em quando">Uso de vez em quando</button><button type="button" class="opt" data-q="a3" data-v="Não uso agenda digital">Não uso agenda digital</button></div></div>
+<div class="q" data-multi="0"><p class="qlabel">Seu Instagram é conta profissional?</p><p class="qdesc">Comercial ou de criador de conteúdo. Dá para ver em Configurações, tipo de conta.</p><div class="opts"><button type="button" class="opt" data-q="a4" data-v="Sim">Sim</button><button type="button" class="opt" data-q="a4" data-v="Não, é pessoal">Não, é pessoal</button><button type="button" class="opt" data-q="a4" data-v="Não sei dizer">Não sei dizer</button></div></div>
+<div class="q" data-multi="0"><p class="qlabel">Você é a administradora dessas contas?</p><p class="qdesc">Preciso disso para gerar as conexões. Não preciso da sua senha em momento nenhum.</p><div class="opts"><button type="button" class="opt" data-q="a5" data-v="Sim, de todas">Sim, de todas</button><button type="button" class="opt" data-q="a5" data-v="De algumas sim, de outras não">De algumas sim, de outras não</button><button type="button" class="opt" data-q="a5" data-v="Quem administra é outra pessoa">Quem administra é outra pessoa</button></div></div>
+<div class="q" data-multi="0"><p class="qlabel">Onde ficam as suas tarefas hoje?</p><div class="opts"><button type="button" class="opt" data-q="a6" data-v="Na minha cabeça">Na minha cabeça</button><button type="button" class="opt" data-q="a6" data-v="Bloco de notas do celular">Bloco de notas do celular</button><button type="button" class="opt" data-q="a6" data-v="Planilha">Planilha</button><button type="button" class="opt" data-q="a6" data-v="Aplicativo (Trello, Notion, ClickUp)">Aplicativo (Trello, Notion, ClickUp)</button><button type="button" class="opt" data-q="a6" data-v="Não tenho lugar fixo">Não tenho lugar fixo</button></div></div>
+<div class="q" data-multi="0"><p class="qlabel">Quantas mensagens passam pela sua mão por dia, somando tudo?</p><p class="qdesc">Chute serve.</p><div class="opts"><button type="button" class="opt" data-q="a7" data-v="Até 20">Até 20</button><button type="button" class="opt" data-q="a7" data-v="De 20 a 50">De 20 a 50</button><button type="button" class="opt" data-q="a7" data-v="De 50 a 100">De 50 a 100</button><button type="button" class="opt" data-q="a7" data-v="Mais de 100">Mais de 100</button><button type="button" class="opt" data-q="a7" data-v="Não faço ideia">Não faço ideia</button></div></div>
+<div class="q" data-multi="0"><p class="qlabel">Quantos criadores você acompanha hoje?</p><div class="opts"><button type="button" class="opt" data-q="a8" data-v="Até 5">Até 5</button><button type="button" class="opt" data-q="a8" data-v="De 6 a 20">De 6 a 20</button><button type="button" class="opt" data-q="a8" data-v="De 21 a 50">De 21 a 50</button><button type="button" class="opt" data-q="a8" data-v="Mais de 50">Mais de 50</button></div></div>
+<div class="q" data-multi="0"><p class="qlabel">Onde estão as informações dos criadores hoje?</p><p class="qdesc">Valor combinado, prazo, o que já entregou.</p><div class="opts"><button type="button" class="opt" data-q="a9" data-v="Planilha">Planilha</button><button type="button" class="opt" data-q="a9" data-v="Nas conversas do WhatsApp">Nas conversas do WhatsApp</button><button type="button" class="opt" data-q="a9" data-v="Na minha cabeça">Na minha cabeça</button><button type="button" class="opt" data-q="a9" data-v="Num sistema">Num sistema</button></div></div>
+<div class="q" data-multi="0"><p class="qlabel">Além de você, quem mais vai usar a Aurora?</p><div class="opts"><button type="button" class="opt" data-q="a10" data-v="Só eu">Só eu</button><button type="button" class="opt" data-q="a10" data-v="Eu e mais uma pessoa">Eu e mais uma pessoa</button><button type="button" class="opt" data-q="a10" data-v="Eu e uma equipe">Eu e uma equipe</button></div></div>
+<div class="q" data-multi="0"><p class="qlabel">Você prefere falar ou escrever com ela?</p><div class="opts"><button type="button" class="opt" data-q="a11" data-v="Mando áudio">Mando áudio</button><button type="button" class="opt" data-q="a11" data-v="Escrevo">Escrevo</button><button type="button" class="opt" data-q="a11" data-v="Os dois">Os dois</button></div></div>
+<div class="q" data-multi="0"><p class="qlabel">Que horas você quer o resumo da manhã?</p><div class="opts"><button type="button" class="opt" data-q="a12" data-v="6h">6h</button><button type="button" class="opt" data-q="a12" data-v="7h">7h</button><button type="button" class="opt" data-q="a12" data-v="8h">8h</button><button type="button" class="opt" data-q="a12" data-v="9h">9h</button><button type="button" class="opt" data-q="a12" data-v="Mais tarde">Mais tarde</button><button type="button" class="opt" data-q="a12" data-v="Não quero resumo de manhã">Não quero resumo de manhã</button></div></div>
+  </section>
+
+  <section class="blk">
+    <div class="sec-title"><div class="n">03</div><h2>O que ela vai fazer</h2></div>
+    <p class="sec-sub">47 coisas que uma assistente pode fazer. Marque <b>Agora</b> no que resolveria a sua semana, <b>Depois</b> no que seria bom mas não é urgente, e <b>Não preciso</b> sem dó. O que você não marcar, eu não construo, e você não paga.</p>
+    <div class="area"><h3 class="areah">Manhã e dia</h3><div class="items"><div class="item"><div class="ilbl">Me manda de manhã o que é mais urgente hoje</div><div class="seg"><button type="button" class="sg ag" data-q="b1" data-v="Agora">Agora</button><button type="button" class="sg dp" data-q="b1" data-v="Depois">Depois</button><button type="button" class="sg no" data-q="b1" data-v="Não preciso">Não preciso</button></div></div><div class="item"><div class="ilbl">Me mostra a agenda do dia em ordem de prioridade</div><div class="seg"><button type="button" class="sg ag" data-q="b2" data-v="Agora">Agora</button><button type="button" class="sg dp" data-q="b2" data-v="Depois">Depois</button><button type="button" class="sg no" data-q="b2" data-v="Não preciso">Não preciso</button></div></div><div class="item"><div class="ilbl">Me avisa 1 hora antes de cada compromisso</div><div class="seg"><button type="button" class="sg ag" data-q="b3" data-v="Agora">Agora</button><button type="button" class="sg dp" data-q="b3" data-v="Depois">Depois</button><button type="button" class="sg no" data-q="b3" data-v="Não preciso">Não preciso</button></div></div><div class="item"><div class="ilbl">No fim do dia, me diz o que ficou para trás</div><div class="seg"><button type="button" class="sg ag" data-q="b4" data-v="Agora">Agora</button><button type="button" class="sg dp" data-q="b4" data-v="Depois">Depois</button><button type="button" class="sg no" data-q="b4" data-v="Não preciso">Não preciso</button></div></div><div class="item"><div class="ilbl">Me lembra do que eu prometi e não fiz</div><div class="seg"><button type="button" class="sg ag" data-q="b5" data-v="Agora">Agora</button><button type="button" class="sg dp" data-q="b5" data-v="Depois">Depois</button><button type="button" class="sg no" data-q="b5" data-v="Não preciso">Não preciso</button></div></div><div class="item"><div class="ilbl">Junta numa lista só tudo que precisa da minha decisão hoje</div><div class="seg"><button type="button" class="sg ag" data-q="b6" data-v="Agora">Agora</button><button type="button" class="sg dp" data-q="b6" data-v="Depois">Depois</button><button type="button" class="sg no" data-q="b6" data-v="Não preciso">Não preciso</button></div></div><div class="item"><div class="ilbl">Me avisa quando eu marquei duas coisas no mesmo horário</div><div class="seg"><button type="button" class="sg ag" data-q="b7" data-v="Agora">Agora</button><button type="button" class="sg dp" data-q="b7" data-v="Depois">Depois</button><button type="button" class="sg no" data-q="b7" data-v="Não preciso">Não preciso</button></div></div></div></div>
+<div class="area"><h3 class="areah">Mensagens</h3><div class="items"><div class="item"><div class="ilbl">Resume as conversas que ficaram sem resposta</div><div class="seg"><button type="button" class="sg ag" data-q="b8" data-v="Agora">Agora</button><button type="button" class="sg dp" data-q="b8" data-v="Depois">Depois</button><button type="button" class="sg no" data-q="b8" data-v="Não preciso">Não preciso</button></div></div><div class="item"><div class="ilbl">Escreve o rascunho da resposta e eu aprovo</div><div class="seg"><button type="button" class="sg ag" data-q="b9" data-v="Agora">Agora</button><button type="button" class="sg dp" data-q="b9" data-v="Depois">Depois</button><button type="button" class="sg no" data-q="b9" data-v="Não preciso">Não preciso</button></div></div><div class="item"><div class="ilbl">Separa o que é urgente do que pode esperar</div><div class="seg"><button type="button" class="sg ag" data-q="b10" data-v="Agora">Agora</button><button type="button" class="sg dp" data-q="b10" data-v="Depois">Depois</button><button type="button" class="sg no" data-q="b10" data-v="Não preciso">Não preciso</button></div></div><div class="item"><div class="ilbl">Responde sozinha as perguntas que se repetem</div><div class="seg"><button type="button" class="sg ag" data-q="b11" data-v="Agora">Agora</button><button type="button" class="sg dp" data-q="b11" data-v="Depois">Depois</button><button type="button" class="sg no" data-q="b11" data-v="Não preciso">Não preciso</button></div></div><div class="item"><div class="ilbl">Me avisa quando alguém importante me chamou e eu não vi</div><div class="seg"><button type="button" class="sg ag" data-q="b12" data-v="Agora">Agora</button><button type="button" class="sg dp" data-q="b12" data-v="Depois">Depois</button><button type="button" class="sg no" data-q="b12" data-v="Não preciso">Não preciso</button></div></div><div class="item"><div class="ilbl">Guarda o que ficou combinado em cada conversa</div><div class="seg"><button type="button" class="sg ag" data-q="b13" data-v="Agora">Agora</button><button type="button" class="sg dp" data-q="b13" data-v="Depois">Depois</button><button type="button" class="sg no" data-q="b13" data-v="Não preciso">Não preciso</button></div></div></div></div>
+<div class="area"><h3 class="areah">E-mail</h3><div class="items"><div class="item"><div class="ilbl">Separa o que importa do que é propaganda</div><div class="seg"><button type="button" class="sg ag" data-q="b14" data-v="Agora">Agora</button><button type="button" class="sg dp" data-q="b14" data-v="Depois">Depois</button><button type="button" class="sg no" data-q="b14" data-v="Não preciso">Não preciso</button></div></div><div class="item"><div class="ilbl">Resume os e-mails longos em 3 linhas</div><div class="seg"><button type="button" class="sg ag" data-q="b15" data-v="Agora">Agora</button><button type="button" class="sg dp" data-q="b15" data-v="Depois">Depois</button><button type="button" class="sg no" data-q="b15" data-v="Não preciso">Não preciso</button></div></div><div class="item"><div class="ilbl">Escreve o rascunho da resposta para eu aprovar</div><div class="seg"><button type="button" class="sg ag" data-q="b16" data-v="Agora">Agora</button><button type="button" class="sg dp" data-q="b16" data-v="Depois">Depois</button><button type="button" class="sg no" data-q="b16" data-v="Não preciso">Não preciso</button></div></div><div class="item"><div class="ilbl">Me avisa de e-mail parado há mais de 2 dias</div><div class="seg"><button type="button" class="sg ag" data-q="b17" data-v="Agora">Agora</button><button type="button" class="sg dp" data-q="b17" data-v="Depois">Depois</button><button type="button" class="sg no" data-q="b17" data-v="Não preciso">Não preciso</button></div></div><div class="item"><div class="ilbl">Acha aquele e-mail que eu não lembro onde está</div><div class="seg"><button type="button" class="sg ag" data-q="b18" data-v="Agora">Agora</button><button type="button" class="sg dp" data-q="b18" data-v="Depois">Depois</button><button type="button" class="sg no" data-q="b18" data-v="Não preciso">Não preciso</button></div></div><div class="item"><div class="ilbl">Arquiva sozinha o que não precisa de mim</div><div class="seg"><button type="button" class="sg ag" data-q="b19" data-v="Agora">Agora</button><button type="button" class="sg dp" data-q="b19" data-v="Depois">Depois</button><button type="button" class="sg no" data-q="b19" data-v="Não preciso">Não preciso</button></div></div></div></div>
+<div class="area"><h3 class="areah">Criadores</h3><div class="items"><div class="item"><div class="ilbl">Lista quem ainda não entregou o conteúdo</div><div class="seg"><button type="button" class="sg ag" data-q="b20" data-v="Agora">Agora</button><button type="button" class="sg dp" data-q="b20" data-v="Depois">Depois</button><button type="button" class="sg no" data-q="b20" data-v="Não preciso">Não preciso</button></div></div><div class="item"><div class="ilbl">Cobra quem está atrasado, com o texto que eu aprovar</div><div class="seg"><button type="button" class="sg ag" data-q="b21" data-v="Agora">Agora</button><button type="button" class="sg dp" data-q="b21" data-v="Depois">Depois</button><button type="button" class="sg no" data-q="b21" data-v="Não preciso">Não preciso</button></div></div><div class="item"><div class="ilbl">Me diz quem entregou e está esperando a minha aprovação</div><div class="seg"><button type="button" class="sg ag" data-q="b22" data-v="Agora">Agora</button><button type="button" class="sg dp" data-q="b22" data-v="Depois">Depois</button><button type="button" class="sg no" data-q="b22" data-v="Não preciso">Não preciso</button></div></div><div class="item"><div class="ilbl">Guarda o que foi combinado com cada criador (valor, prazo, entrega)</div><div class="seg"><button type="button" class="sg ag" data-q="b23" data-v="Agora">Agora</button><button type="button" class="sg dp" data-q="b23" data-v="Depois">Depois</button><button type="button" class="sg no" data-q="b23" data-v="Não preciso">Não preciso</button></div></div><div class="item"><div class="ilbl">Monta o briefing do criador a partir do que a marca pediu</div><div class="seg"><button type="button" class="sg ag" data-q="b24" data-v="Agora">Agora</button><button type="button" class="sg dp" data-q="b24" data-v="Depois">Depois</button><button type="button" class="sg no" data-q="b24" data-v="Não preciso">Não preciso</button></div></div><div class="item"><div class="ilbl">Me lembra de pagar quem já entregou</div><div class="seg"><button type="button" class="sg ag" data-q="b25" data-v="Agora">Agora</button><button type="button" class="sg dp" data-q="b25" data-v="Depois">Depois</button><button type="button" class="sg no" data-q="b25" data-v="Não preciso">Não preciso</button></div></div><div class="item"><div class="ilbl">Me diz quem sempre atrasa e quem nunca falha</div><div class="seg"><button type="button" class="sg ag" data-q="b26" data-v="Agora">Agora</button><button type="button" class="sg dp" data-q="b26" data-v="Depois">Depois</button><button type="button" class="sg no" data-q="b26" data-v="Não preciso">Não preciso</button></div></div><div class="item"><div class="ilbl">Responde as dúvidas repetidas dos criadores</div><div class="seg"><button type="button" class="sg ag" data-q="b27" data-v="Agora">Agora</button><button type="button" class="sg dp" data-q="b27" data-v="Depois">Depois</button><button type="button" class="sg no" data-q="b27" data-v="Não preciso">Não preciso</button></div></div></div></div>
+<div class="area"><h3 class="areah">Conteúdo e canais</h3><div class="items"><div class="item"><div class="ilbl">Me avisa quando um comentário precisa de resposta minha</div><div class="seg"><button type="button" class="sg ag" data-q="b28" data-v="Agora">Agora</button><button type="button" class="sg dp" data-q="b28" data-v="Depois">Depois</button><button type="button" class="sg no" data-q="b28" data-v="Não preciso">Não preciso</button></div></div><div class="item"><div class="ilbl">Responde sozinha comentário simples</div><div class="seg"><button type="button" class="sg ag" data-q="b29" data-v="Agora">Agora</button><button type="button" class="sg dp" data-q="b29" data-v="Depois">Depois</button><button type="button" class="sg no" data-q="b29" data-v="Não preciso">Não preciso</button></div></div><div class="item"><div class="ilbl">Responde direct do Instagram</div><div class="seg"><button type="button" class="sg ag" data-q="b30" data-v="Agora">Agora</button><button type="button" class="sg dp" data-q="b30" data-v="Depois">Depois</button><button type="button" class="sg no" data-q="b30" data-v="Não preciso">Não preciso</button></div></div><div class="item"><div class="ilbl">Responde direct do TikTok</div><div class="seg"><button type="button" class="sg ag" data-q="b31" data-v="Agora">Agora</button><button type="button" class="sg dp" data-q="b31" data-v="Depois">Depois</button><button type="button" class="sg no" data-q="b31" data-v="Não preciso">Não preciso</button></div></div><div class="item"><div class="ilbl">Me manda os números dos posts da semana</div><div class="seg"><button type="button" class="sg ag" data-q="b32" data-v="Agora">Agora</button><button type="button" class="sg dp" data-q="b32" data-v="Depois">Depois</button><button type="button" class="sg no" data-q="b32" data-v="Não preciso">Não preciso</button></div></div><div class="item"><div class="ilbl">Publica no TikTok o que eu aprovar</div><div class="seg"><button type="button" class="sg ag" data-q="b33" data-v="Agora">Agora</button><button type="button" class="sg dp" data-q="b33" data-v="Depois">Depois</button><button type="button" class="sg no" data-q="b33" data-v="Não preciso">Não preciso</button></div></div><div class="item"><div class="ilbl">Me avisa quando um post está indo muito bem ou muito mal</div><div class="seg"><button type="button" class="sg ag" data-q="b34" data-v="Agora">Agora</button><button type="button" class="sg dp" data-q="b34" data-v="Depois">Depois</button><button type="button" class="sg no" data-q="b34" data-v="Não preciso">Não preciso</button></div></div></div></div>
+<div class="area"><h3 class="areah">Comercial</h3><div class="items"><div class="item"><div class="ilbl">Me lembra da proposta que está parada há dias</div><div class="seg"><button type="button" class="sg ag" data-q="b35" data-v="Agora">Agora</button><button type="button" class="sg dp" data-q="b35" data-v="Depois">Depois</button><button type="button" class="sg no" data-q="b35" data-v="Não preciso">Não preciso</button></div></div><div class="item"><div class="ilbl">Faz o follow-up com a marca, com o texto que eu aprovar</div><div class="seg"><button type="button" class="sg ag" data-q="b36" data-v="Agora">Agora</button><button type="button" class="sg dp" data-q="b36" data-v="Depois">Depois</button><button type="button" class="sg no" data-q="b36" data-v="Não preciso">Não preciso</button></div></div><div class="item"><div class="ilbl">Monta a proposta a partir do modelo que eu já uso</div><div class="seg"><button type="button" class="sg ag" data-q="b37" data-v="Agora">Agora</button><button type="button" class="sg dp" data-q="b37" data-v="Depois">Depois</button><button type="button" class="sg no" data-q="b37" data-v="Não preciso">Não preciso</button></div></div><div class="item"><div class="ilbl">Me diz quanto eu tenho em negociação agora</div><div class="seg"><button type="button" class="sg ag" data-q="b38" data-v="Agora">Agora</button><button type="button" class="sg dp" data-q="b38" data-v="Depois">Depois</button><button type="button" class="sg no" data-q="b38" data-v="Não preciso">Não preciso</button></div></div><div class="item"><div class="ilbl">Guarda o histórico de cada marca (o que pediu, quanto pagou)</div><div class="seg"><button type="button" class="sg ag" data-q="b39" data-v="Agora">Agora</button><button type="button" class="sg dp" data-q="b39" data-v="Depois">Depois</button><button type="button" class="sg no" data-q="b39" data-v="Não preciso">Não preciso</button></div></div><div class="item"><div class="ilbl">Me avisa quando um cliente antigo está sumido</div><div class="seg"><button type="button" class="sg ag" data-q="b40" data-v="Agora">Agora</button><button type="button" class="sg dp" data-q="b40" data-v="Depois">Depois</button><button type="button" class="sg no" data-q="b40" data-v="Não preciso">Não preciso</button></div></div></div></div>
+<div class="area"><h3 class="areah">Organizar e lembrar</h3><div class="items"><div class="item"><div class="ilbl">Vira a minha lista de tarefas: eu falo, ela anota</div><div class="seg"><button type="button" class="sg ag" data-q="b41" data-v="Agora">Agora</button><button type="button" class="sg dp" data-q="b41" data-v="Depois">Depois</button><button type="button" class="sg no" data-q="b41" data-v="Não preciso">Não preciso</button></div></div><div class="item"><div class="ilbl">Guarda arquivo e acha depois quando eu pedir</div><div class="seg"><button type="button" class="sg ag" data-q="b42" data-v="Agora">Agora</button><button type="button" class="sg dp" data-q="b42" data-v="Depois">Depois</button><button type="button" class="sg no" data-q="b42" data-v="Não preciso">Não preciso</button></div></div><div class="item"><div class="ilbl">Transcreve o áudio que eu mandar e vira tarefa</div><div class="seg"><button type="button" class="sg ag" data-q="b43" data-v="Agora">Agora</button><button type="button" class="sg dp" data-q="b43" data-v="Depois">Depois</button><button type="button" class="sg no" data-q="b43" data-v="Não preciso">Não preciso</button></div></div><div class="item"><div class="ilbl">Me responde o que foi decidido semana passada</div><div class="seg"><button type="button" class="sg ag" data-q="b44" data-v="Agora">Agora</button><button type="button" class="sg dp" data-q="b44" data-v="Depois">Depois</button><button type="button" class="sg no" data-q="b44" data-v="Não preciso">Não preciso</button></div></div><div class="item"><div class="ilbl">Registra o que eu combinei na reunião</div><div class="seg"><button type="button" class="sg ag" data-q="b45" data-v="Agora">Agora</button><button type="button" class="sg dp" data-q="b45" data-v="Depois">Depois</button><button type="button" class="sg no" data-q="b45" data-v="Não preciso">Não preciso</button></div></div><div class="item"><div class="ilbl">Me diz o que tenho a receber e a pagar</div><div class="seg"><button type="button" class="sg ag" data-q="b46" data-v="Agora">Agora</button><button type="button" class="sg dp" data-q="b46" data-v="Depois">Depois</button><button type="button" class="sg no" data-q="b46" data-v="Não preciso">Não preciso</button></div></div><div class="item"><div class="ilbl">Me avisa de data importante (contrato vencendo, renovação)</div><div class="seg"><button type="button" class="sg ag" data-q="b47" data-v="Agora">Agora</button><button type="button" class="sg dp" data-q="b47" data-v="Depois">Depois</button><button type="button" class="sg no" data-q="b47" data-v="Não preciso">Não preciso</button></div></div></div></div>
+  </section>
+
+  <section class="blk">
+    <div class="sec-title accentn"><div class="n">04</div><h2>A sua rotina</h2></div>
+    <p class="sec-sub">Três respostas curtas. São as que mais valem, então escreve do jeito que você falaria.</p>
+    <div class="q"><p class="qlabel">Me conta como é a sua manhã, de quando você acorda até começar a trabalhar de verdade.</p>
+      <textarea data-q="c1" placeholder="Do jeito que você falaria. Se preferir, me manda em áudio no WhatsApp e eu transcrevo."></textarea></div>
+    <div class="q"><p class="qlabel">O que mais rouba o seu tempo na semana?</p>
+      <textarea data-q="c2" placeholder="Aquilo que você faz toda semana e sente que não deveria estar fazendo."></textarea></div>
+    <div class="q"><p class="qlabel">O que você mais esquece?</p>
+      <textarea data-q="c3" placeholder=""></textarea></div>
+  </section>
+
+  <section class="blk">
+    <div class="sec-title"><div class="n">05</div><h2>Limites</h2></div>
+    <p class="sec-sub">Isso vira regra dura dentro dela, não sugestão.</p>
+    <div class="q"><p class="qlabel">Tem alguma coisa que a Aurora nunca deve fazer sem te perguntar antes?</p>
+      <textarea data-q="d1" placeholder="Ex: falar com cliente, mexer em preço, publicar qualquer coisa."></textarea></div>
+    <div class="q" data-multi="0"><p class="qlabel">A Flo Baby entra também?</p>
+      <p class="qdesc">Hoje a Aurora está desenhada para o Creators Guzman. Se você quiser uma só para os dois negócios, isso muda o tamanho do projeto e eu prefiro que a escolha seja sua.</p>
+      <div class="opts">
+        <button type="button" class="opt" data-q="d2" data-v="Sim, uma só para os dois">Sim, uma só para os dois</button>
+        <button type="button" class="opt" data-q="d2" data-v="Não, só Creators Guzman">Não, só Creators Guzman</button>
+        <button type="button" class="opt" data-q="d2" data-v="Não sei ainda">Não sei ainda</button>
+      </div></div>
+    <div class="q"><p class="qlabel">O que eu não perguntei e você acha que eu preciso saber?</p>
+      <textarea data-q="d3" placeholder="Opcional."></textarea></div>
+  </section>
+
+  <div class="done">
+    <b>Terminou?</b> Toque em <b>Copiar respostas</b> aqui embaixo e cole na nossa conversa do WhatsApp. Eu leio tudo e volto com o desenho da sua Aurora e o prazo.
+  </div>
+  <textarea id="out" readonly aria-label="Respostas para copiar"></textarea>
+
+  <footer>
+    <span>V3 Nexus · Creators Guzman</span>
+    <span class="mono">2026</span>
+  </footer>
+</div>
+
+<div class="bar">
+  <div class="cnt"><b id="cA">0</b>/47 marcados · <b id="cB">0</b> como agora<br><span id="save">salvo automaticamente</span></div>
+  <div class="acts">
+    <button class="btn" id="dl" type="button">Salvar .md</button>
+    <button class="btn primary" id="cp" type="button">Copiar respostas</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  var KEY='aurora-diagnostico-v1';
+  var st={};
+  try{ st=JSON.parse(localStorage.getItem(KEY)||'{}'); }catch(e){ st={}; }
+
+  function save(){ try{ localStorage.setItem(KEY, JSON.stringify(st)); }catch(e){} }
+
+  function paint(){
+    document.querySelectorAll('[data-q][data-v]').forEach(function(b){
+      var q=b.getAttribute('data-q'), v=b.getAttribute('data-v'), cur=st[q];
+      var on = Array.isArray(cur) ? cur.indexOf(v)>-1 : cur===v;
+      b.setAttribute('aria-pressed', on?'true':'false');
+    });
+    document.querySelectorAll('textarea[data-q]').forEach(function(t){
+      if(st[t.getAttribute('data-q')]) t.value=st[t.getAttribute('data-q')];
+    });
+    var marc=0, agora=0;
+    for(var i=1;i<=47;i++){ var v=st['b'+i]; if(v){ marc++; if(v==='Agora') agora++; } }
+    document.getElementById('cA').textContent=marc;
+    document.getElementById('cB').textContent=agora;
+  }
+
+  document.addEventListener('click', function(e){
+    var b=e.target.closest('[data-q][data-v]'); if(!b) return;
+    var q=b.getAttribute('data-q'), v=b.getAttribute('data-v');
+    var multi = b.closest('.q') && b.closest('.q').getAttribute('data-multi')==='1';
+    if(multi){
+      var arr = Array.isArray(st[q]) ? st[q] : [];
+      var i=arr.indexOf(v); if(i>-1){ arr.splice(i,1); } else { arr.push(v); }
+      st[q]=arr;
+    } else {
+      st[q] = (st[q]===v) ? '' : v;
+    }
+    save(); paint(); flash(); agendaEnvio();
+  });
+
+  document.addEventListener('input', function(e){
+    var t=e.target; if(t.tagName!=='TEXTAREA'||!t.getAttribute('data-q')) return;
+    st[t.getAttribute('data-q')]=t.value; save(); flash(); agendaEnvio();
+  });
+
+  var tmr;
+  function flash(){
+    var s=document.getElementById('save'); s.textContent='salvo';
+    clearTimeout(tmr); tmr=setTimeout(function(){ s.textContent='salvo automaticamente'; },1200);
+  }
+
+  var LABELS=["Me manda de manhã o que é mais urgente hoje", "Me mostra a agenda do dia em ordem de prioridade", "Me avisa 1 hora antes de cada compromisso", "No fim do dia, me diz o que ficou para trás", "Me lembra do que eu prometi e não fiz", "Junta numa lista só tudo que precisa da minha decisão hoje", "Me avisa quando eu marquei duas coisas no mesmo horário", "Resume as conversas que ficaram sem resposta", "Escreve o rascunho da resposta e eu aprovo", "Separa o que é urgente do que pode esperar", "Responde sozinha as perguntas que se repetem", "Me avisa quando alguém importante me chamou e eu não vi", "Guarda o que ficou combinado em cada conversa", "Separa o que importa do que é propaganda", "Resume os e-mails longos em 3 linhas", "Escreve o rascunho da resposta para eu aprovar", "Me avisa de e-mail parado há mais de 2 dias", "Acha aquele e-mail que eu não lembro onde está", "Arquiva sozinha o que não precisa de mim", "Lista quem ainda não entregou o conteúdo", "Cobra quem está atrasado, com o texto que eu aprovar", "Me diz quem entregou e está esperando a minha aprovação", "Guarda o que foi combinado com cada criador (valor, prazo, entrega)", "Monta o briefing do criador a partir do que a marca pediu", "Me lembra de pagar quem já entregou", "Me diz quem sempre atrasa e quem nunca falha", "Responde as dúvidas repetidas dos criadores", "Me avisa quando um comentário precisa de resposta minha", "Responde sozinha comentário simples", "Responde direct do Instagram", "Responde direct do TikTok", "Me manda os números dos posts da semana", "Publica no TikTok o que eu aprovar", "Me avisa quando um post está indo muito bem ou muito mal", "Me lembra da proposta que está parada há dias", "Faz o follow-up com a marca, com o texto que eu aprovar", "Monta a proposta a partir do modelo que eu já uso", "Me diz quanto eu tenho em negociação agora", "Guarda o histórico de cada marca (o que pediu, quanto pagou)", "Me avisa quando um cliente antigo está sumido", "Vira a minha lista de tarefas: eu falo, ela anota", "Guarda arquivo e acha depois quando eu pedir", "Transcreve o áudio que eu mandar e vira tarefa", "Me responde o que foi decidido semana passada", "Registra o que eu combinei na reunião", "Me diz o que tenho a receber e a pagar", "Me avisa de data importante (contrato vencendo, renovação)"];
+  var AREAS=["Manhã e dia", "Manhã e dia", "Manhã e dia", "Manhã e dia", "Manhã e dia", "Manhã e dia", "Manhã e dia", "Mensagens", "Mensagens", "Mensagens", "Mensagens", "Mensagens", "Mensagens", "E-mail", "E-mail", "E-mail", "E-mail", "E-mail", "E-mail", "Criadores", "Criadores", "Criadores", "Criadores", "Criadores", "Criadores", "Criadores", "Criadores", "Conteúdo e canais", "Conteúdo e canais", "Conteúdo e canais", "Conteúdo e canais", "Conteúdo e canais", "Conteúdo e canais", "Conteúdo e canais", "Comercial", "Comercial", "Comercial", "Comercial", "Comercial", "Comercial", "Organizar e lembrar", "Organizar e lembrar", "Organizar e lembrar", "Organizar e lembrar", "Organizar e lembrar", "Organizar e lembrar", "Organizar e lembrar"];
+
+  function hoje(){ return new Date().toLocaleDateString('pt-BR'); }
+
+  function texto(){
+    var L=[];
+    L.push('# Diagnostico da Aurora · Creators Guzman');
+    L.push('');
+    L.push('> Respondido por Amanda em '+hoje()+'.');
+    L.push('> Gerado pelo formulario, nao editar a mao. Fonte: brief/01-diagnostico-aurora.md');
+    L.push('');
+    L.push('## O que ela ja tem');
+    document.querySelectorAll('.q[data-multi]').forEach(function(q){
+      var b=q.querySelector('[data-q]'); if(!b) return;
+      var id=b.getAttribute('data-q'); if(id.charAt(0)!=='a'&&id!=='d2') return;
+      var v=st[id]; if(!v||(Array.isArray(v)&&!v.length)) return;
+      L.push('- **'+q.querySelector('.qlabel').textContent+'** '+(Array.isArray(v)?v.join(', '):v));
+    });
+    L.push('');
+    var cont={};
+    ['Agora','Depois','Não preciso'].forEach(function(cat){ cont[cat]=0;
+      for(var i=1;i<=47;i++){ if(st['b'+i]===cat) cont[cat]++; } });
+    L.push('## Escopo marcado');
+    L.push('');
+    L.push('| Marcacao | Itens |');
+    L.push('|---|---|');
+    L.push('| Agora | '+cont['Agora']+' |');
+    L.push('| Depois | '+cont['Depois']+' |');
+    L.push('| Nao preciso | '+cont['Não preciso']+' |');
+    L.push('| Sem resposta | '+(47-cont['Agora']-cont['Depois']-cont['Não preciso'])+' |');
+    L.push('');
+    ['Agora','Depois','Não preciso'].forEach(function(cat){
+      L.push('### '+cat);
+      var any=false;
+      for(var i=1;i<=47;i++){ if(st['b'+i]===cat){ L.push('- `'+AREAS[i-1]+'` '+LABELS[i-1]); any=true; } }
+      if(!any) L.push('_(nada marcado)_');
+      L.push('');
+    });
+    L.push('## A rotina dela');
+    L.push('');
+    [['c1','Como e a manha dela'],['c2','O que mais rouba o tempo dela'],['c3','O que ela mais esquece'],
+     ['d1','O que a Aurora nunca deve fazer sem perguntar'],['d3','O que nao foi perguntado']].forEach(function(p){
+      if(st[p[0]]){ L.push('**'+p[1]+'**'); L.push(''); L.push(st[p[0]]); L.push(''); }
+    });
+    return L.join('\n');
+  }
+
+  // Carteiro opcional: preencha ENDPOINT com a URL do webhook do n8n para o .md
+  // ser gravado sozinho no repositorio PRIVADO. Vazio = so copiar e salvar.
+  var ENDPOINT='';
+  var enviado='', tEnv;
+  function enviar(fim){
+    if(!ENDPOINT) return;
+    var t=texto(); if(t===enviado && !fim) return; enviado=t;
+    var u=new URL(location.href);
+    try{
+      fetch(ENDPOINT,{method:'POST',mode:'cors',
+        headers:{'Content-Type':'text/plain;charset=utf-8'},
+        body:JSON.stringify({quem:'amanda',cliente:'creators-guzman',
+          token:u.searchParams.get('k')||'',final:!!fim,
+          marcados:document.getElementById('cA').textContent,
+          agora:document.getElementById('cB').textContent,
+          md:t})}).catch(function(){});
+    }catch(e){}
+  }
+  function agendaEnvio(){ clearTimeout(tEnv); tEnv=setTimeout(function(){ enviar(false); },20000); }
+
+  document.getElementById('cp').addEventListener('click', function(){
+    var t=texto(), btn=this; enviar(true);
+    function ok(){ btn.textContent='Copiado. Cole no WhatsApp'; setTimeout(function(){ btn.textContent='Copiar respostas'; },2600); }
+    function manual(){
+      var o=document.getElementById('out'); o.style.display='block'; o.value=t;
+      o.focus(); o.select(); btn.textContent='Selecione e copie acima';
+      o.scrollIntoView({behavior:'smooth',block:'center'});
+    }
+    if(navigator.clipboard && window.isSecureContext){
+      navigator.clipboard.writeText(t).then(ok).catch(manual);
+    } else {
+      var o=document.getElementById('out'); o.style.display='block'; o.value=t; o.select();
+      try{ document.execCommand('copy') ? ok() : manual(); }catch(e){ manual(); }
+    }
+  });
+
+  document.getElementById('dl').addEventListener('click', function(){
+    try{
+      enviar(true);
+      var b=new Blob([texto()],{type:'text/markdown;charset=utf-8'});
+      var a=document.createElement('a');
+      a.href=URL.createObjectURL(b); a.download='respostas-aurora-amanda.md';
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    }catch(e){
+      var o=document.getElementById('out'); o.style.display='block'; o.value=texto(); o.select();
+    }
+  });
+
+  paint();
+})();
+</script>
+</body>
+</html>
