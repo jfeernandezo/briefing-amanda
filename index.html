@@ -317,7 +317,7 @@
   var ENDPOINT = '';
   // 'cors'    -> receptor devolve Access-Control-Allow-Origin (n8n). Confirma de verdade.
   // 'no-cors' -> receptor nao devolve o header (Apps Script). Envia, mas sem confirmacao.
-  var MODO     = 'cors';
+  var MODO     = 'no-cors';   // Apps Script: responde com redirect, o navegador nao deixa ler
   var ESPERA   = 3000;      // junta as marcacoes rapidas antes de mandar
   var RETENTA  = 15000;     // se a rede falhar, tenta de novo
 
