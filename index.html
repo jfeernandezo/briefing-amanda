@@ -91,6 +91,13 @@
     box-shadow:0 -6px 20px rgba(32,33,36,.06)}
   .bar .cnt{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);line-height:1.4}
   .bar .cnt b{color:var(--ink)}
+  .sync{color:var(--muted)}
+  .sync.ok{color:var(--accent)}
+  .sync.off{color:var(--warn)}
+  .sync:before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;
+    background:var(--off);margin-right:6px;vertical-align:middle}
+  .sync.ok:before{background:var(--accent)}
+  .sync.off:before{background:var(--warn)}
   .bar .acts{display:flex;gap:8px;flex:none}
   .btn{font:inherit;font-size:14px;font-weight:600;padding:12px 18px;cursor:pointer;border:1px solid var(--line-strong);
     background:#fff;color:var(--ink);transition:.15s var(--ease)}
@@ -189,8 +196,10 @@
   </section>
 
   <div class="done">
-    <b>Terminou?</b> Toque em <b>Enviar no WhatsApp</b> aqui embaixo. Abre a nossa conversa com as suas respostas já copiadas: é só colar e mandar. Eu leio tudo e volto com o desenho da sua Aurora e o prazo.
-    <div style="margin-top:12px;font-size:14px">Prefere guardar um arquivo? <a href="#" id="dl" style="color:var(--ink)">Salvar como .md</a></div>
+    <b>Não precisa enviar nada.</b> Tudo o que você marca é salvo na hora, sozinho. Pode fechar e voltar depois que continua de onde parou. Quando acabar, toque em <b>Terminei</b> aqui embaixo, que eu recebo o aviso e volto com o desenho da sua Aurora.
+    <div style="margin-top:12px;font-size:14px">
+      <a href="#" id="dl" style="color:var(--ink)">Salvar uma cópia em .md</a>
+    </div>
   </div>
   <textarea id="out" readonly aria-label="Respostas para copiar"></textarea>
 
@@ -201,10 +210,11 @@
 </div>
 
 <div class="bar">
-  <div class="cnt"><b id="cA">0</b>/47 marcados · <b id="cB">0</b> como agora<br><span id="save">salvo automaticamente</span></div>
+  <div class="cnt"><b id="cA">0</b>/47 marcados · <b id="cB">0</b> como agora<br>
+    <span id="save" class="sync">salvando sozinho</span></div>
   <div class="acts">
     <button class="btn" id="cp" type="button">Copiar</button>
-    <button class="btn primary" id="wa" type="button">Enviar no WhatsApp</button>
+    <button class="btn primary" id="fim" type="button">Terminei</button>
   </div>
 </div>
 
@@ -242,19 +252,15 @@
     } else {
       st[q] = (st[q]===v) ? '' : v;
     }
-    save(); paint(); flash(); agendaEnvio();
+    save(); paint(); flash(); agenda();
   });
 
   document.addEventListener('input', function(e){
     var t=e.target; if(t.tagName!=='TEXTAREA'||!t.getAttribute('data-q')) return;
-    st[t.getAttribute('data-q')]=t.value; save(); flash(); agendaEnvio();
+    st[t.getAttribute('data-q')]=t.value; save(); flash(); agenda();
   });
 
-  var tmr;
-  function flash(){
-    var s=document.getElementById('save'); s.textContent='salvo';
-    clearTimeout(tmr); tmr=setTimeout(function(){ s.textContent='salvo automaticamente'; },1200);
-  }
+  function flash(){ /* o indicador agora e pintado por pintaEstado() */ }
 
   var LABELS=["Me manda de manhã o que é mais urgente hoje", "Me mostra a agenda do dia em ordem de prioridade", "Me avisa 1 hora antes de cada compromisso", "No fim do dia, me diz o que ficou para trás", "Me lembra do que eu prometi e não fiz", "Junta numa lista só tudo que precisa da minha decisão hoje", "Me avisa quando eu marquei duas coisas no mesmo horário", "Resume as conversas que ficaram sem resposta", "Escreve o rascunho da resposta e eu aprovo", "Separa o que é urgente do que pode esperar", "Responde sozinha as perguntas que se repetem", "Me avisa quando alguém importante me chamou e eu não vi", "Guarda o que ficou combinado em cada conversa", "Separa o que importa do que é propaganda", "Resume os e-mails longos em 3 linhas", "Escreve o rascunho da resposta para eu aprovar", "Me avisa de e-mail parado há mais de 2 dias", "Acha aquele e-mail que eu não lembro onde está", "Arquiva sozinha o que não precisa de mim", "Lista quem ainda não entregou o conteúdo", "Cobra quem está atrasado, com o texto que eu aprovar", "Me diz quem entregou e está esperando a minha aprovação", "Guarda o que foi combinado com cada criador (valor, prazo, entrega)", "Monta o briefing do criador a partir do que a marca pediu", "Me lembra de pagar quem já entregou", "Me diz quem sempre atrasa e quem nunca falha", "Responde as dúvidas repetidas dos criadores", "Me avisa quando um comentário precisa de resposta minha", "Responde sozinha comentário simples", "Responde direct do Instagram", "Responde direct do TikTok", "Me manda os números dos posts da semana", "Publica no TikTok o que eu aprovar", "Me avisa quando um post está indo muito bem ou muito mal", "Me lembra da proposta que está parada há dias", "Faz o follow-up com a marca, com o texto que eu aprovar", "Monta a proposta a partir do modelo que eu já uso", "Me diz quanto eu tenho em negociação agora", "Guarda o histórico de cada marca (o que pediu, quanto pagou)", "Me avisa quando um cliente antigo está sumido", "Vira a minha lista de tarefas: eu falo, ela anota", "Guarda arquivo e acha depois quando eu pedir", "Transcreve o áudio que eu mandar e vira tarefa", "Me responde o que foi decidido semana passada", "Registra o que eu combinei na reunião", "Me diz o que tenho a receber e a pagar", "Me avisa de data importante (contrato vencendo, renovação)"];
   var AREAS=["Manhã e dia", "Manhã e dia", "Manhã e dia", "Manhã e dia", "Manhã e dia", "Manhã e dia", "Manhã e dia", "Mensagens", "Mensagens", "Mensagens", "Mensagens", "Mensagens", "Mensagens", "E-mail", "E-mail", "E-mail", "E-mail", "E-mail", "E-mail", "Criadores", "Criadores", "Criadores", "Criadores", "Criadores", "Criadores", "Criadores", "Criadores", "Conteúdo e canais", "Conteúdo e canais", "Conteúdo e canais", "Conteúdo e canais", "Conteúdo e canais", "Conteúdo e canais", "Conteúdo e canais", "Comercial", "Comercial", "Comercial", "Comercial", "Comercial", "Comercial", "Organizar e lembrar", "Organizar e lembrar", "Organizar e lembrar", "Organizar e lembrar", "Organizar e lembrar", "Organizar e lembrar", "Organizar e lembrar"];
@@ -304,69 +310,125 @@
     return L.join('\n');
   }
 
-  // Carteiro opcional: preencha ENDPOINT com a URL do webhook do n8n para o .md
-  // ser gravado sozinho no repositorio PRIVADO. Vazio = so copiar e salvar.
-  var ENDPOINT='';
-  var enviado='', tEnv;
-  function enviar(fim){
-    if(!ENDPOINT) return;
-    var t=texto(); if(t===enviado && !fim) return; enviado=t;
-    var u=new URL(location.href);
-    try{
-      fetch(ENDPOINT,{method:'POST',mode:'cors',
-        headers:{'Content-Type':'text/plain;charset=utf-8'},
-        body:JSON.stringify({quem:'amanda',cliente:'creators-guzman',
-          token:u.searchParams.get('k')||'',final:!!fim,
-          marcados:document.getElementById('cA').textContent,
-          agora:document.getElementById('cB').textContent,
-          md:t})}).catch(function(){});
-    }catch(e){}
-  }
-  function agendaEnvio(){ clearTimeout(tEnv); tEnv=setTimeout(function(){ enviar(false); },20000); }
+  // ------------------------------------------------------------------
+  // Salvamento no servidor. Preencha ENDPOINT com a URL que recebe o POST
+  // (webhook do n8n ou web app do Apps Script). Vazio = so salva no aparelho.
+  // ------------------------------------------------------------------
+  var ENDPOINT = '';
+  // 'cors'    -> receptor devolve Access-Control-Allow-Origin (n8n). Confirma de verdade.
+  // 'no-cors' -> receptor nao devolve o header (Apps Script). Envia, mas sem confirmacao.
+  var MODO     = 'cors';
+  var ESPERA   = 3000;      // junta as marcacoes rapidas antes de mandar
+  var RETENTA  = 15000;     // se a rede falhar, tenta de novo
 
-  document.getElementById('cp').addEventListener('click', function(){
-    var t=texto(), btn=this; enviar(true);
-    function ok(){ btn.textContent='Copiado. Cole no WhatsApp'; setTimeout(function(){ btn.textContent='Copiar respostas'; },2600); }
-    function manual(){
-      var o=document.getElementById('out'); o.style.display='block'; o.value=t;
-      o.focus(); o.select(); btn.textContent='Selecione e copie acima';
-      o.scrollIntoView({behavior:'smooth',block:'center'});
-    }
-    if(navigator.clipboard && window.isSecureContext){
-      navigator.clipboard.writeText(t).then(ok).catch(manual);
+  var SIDKEY='aurora-sid';
+  var sid=null;
+  try{
+    sid=localStorage.getItem(SIDKEY);
+    if(!sid){ sid=(Date.now().toString(36)+Math.random().toString(36).slice(2,8)); localStorage.setItem(SIDKEY,sid); }
+  }catch(e){ sid='sem-storage-'+Math.random().toString(36).slice(2,8); }
+
+  var tSync, tRetry, enviando=false, sujo=false, ultimoOk=null, falhas=0;
+
+  function elSync(){ return document.getElementById('save'); }
+  function mostra(txt, cls){
+    var e=elSync(); if(!e) return;
+    e.className='sync'+(cls?' '+cls:''); e.textContent=txt;
+  }
+  function hora(){ return new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}); }
+  function pintaEstado(){
+    if(!ENDPOINT){ mostra('salvo neste aparelho'); return; }
+    if(enviando){ mostra('salvando'); return; }
+    if(falhas>0){ mostra('sem conexão, vou tentar de novo','off'); return; }
+    if(ultimoOk){ mostra('salvo às '+ultimoOk,'ok'); return; }
+    mostra('salvando sozinho');
+  }
+
+  function pacote(fim){
+    var u; try{ u=new URL(location.href); }catch(e){ u={searchParams:{get:function(){return '';}}}; }
+    return JSON.stringify({
+      sid: sid,
+      cliente: 'creators-guzman',
+      quem: 'amanda',
+      token: (u.searchParams.get('k')||''),
+      final: !!fim,
+      total: 47,
+      marcados: Number(document.getElementById('cA').textContent||0),
+      agora: Number(document.getElementById('cB').textContent||0),
+      atualizado: new Date().toISOString(),
+      respostas: st,
+      md: texto()
+    });
+  }
+
+  function sincroniza(fim){
+    if(!ENDPOINT){ return; }
+    if(enviando){ sujo=true; return; }
+    enviando=true; pintaEstado();
+    fetch(ENDPOINT,{
+      method:'POST', mode:MODO, keepalive:true,
+      headers:{'Content-Type':'text/plain;charset=utf-8'},  // text/plain evita o preflight
+      body: pacote(fim)
+    }).then(function(){
+      enviando=false; falhas=0; ultimoOk=hora(); pintaEstado();
+      if(sujo){ sujo=false; agenda(); }
+    }).catch(function(){
+      enviando=false; falhas++; pintaEstado();
+      clearTimeout(tRetry); tRetry=setTimeout(function(){ sincroniza(false); }, RETENTA);
+    });
+  }
+
+  function agenda(fim){
+    if(!ENDPOINT) return;
+    clearTimeout(tSync);
+    tSync=setTimeout(function(){ sincroniza(!!fim); }, fim?0:ESPERA);
+  }
+
+  // se ela fechar o navegador, o ultimo estado ainda sai
+  window.addEventListener('pagehide', function(){
+    if(!ENDPOINT) return;
+    try{
+      var b=new Blob([pacote(false)],{type:'text/plain;charset=utf-8'});
+      if(navigator.sendBeacon) navigator.sendBeacon(ENDPOINT,b);
+    }catch(e){}
+  });
+
+  document.getElementById('fim').addEventListener('click', function(){
+    var btn=this;
+    if(ENDPOINT){
+      agenda(true);
+      btn.textContent='Recebi, obrigado';
+      setTimeout(function(){ btn.textContent='Terminei'; },5000);
     } else {
-      var o=document.getElementById('out'); o.style.display='block'; o.value=t; o.select();
-      try{ document.execCommand('copy') ? ok() : manual(); }catch(e){ manual(); }
+      // sem servidor configurado: cai no plano B, ela manda no WhatsApp
+      var t=texto();
+      var m=document.getElementById('cA').textContent, a=document.getElementById('cB').textContent;
+      var aviso='Terminei o diagnostico da Aurora. Marquei '+m+' de 47, sendo '+a+' como agora.';
+      function abrir(){ window.open('https://wa.me/5548999335671?text='+encodeURIComponent(aviso),'_blank','noopener'); }
+      if(navigator.clipboard && window.isSecureContext){
+        navigator.clipboard.writeText(t).then(abrir).catch(abrir);
+      } else { abrir(); }
     }
   });
 
-  var ZAP='5548999335671'; // WhatsApp da V3 Nexus
-  document.getElementById('wa').addEventListener('click', function(){
+  document.getElementById('cp').addEventListener('click', function(){
     var t=texto(), btn=this;
-    enviar(true);
-    var m=document.getElementById('cA').textContent, a=document.getElementById('cB').textContent;
-    var aviso='Terminei o diagnostico da Aurora. Marquei '+m+' de 47, sendo '+a+' como agora. '+
-              'Vou colar as respostas aqui embaixo.';
-    var url='https://wa.me/'+ZAP+'?text='+encodeURIComponent(aviso);
-    function abrir(){ window.open(url,'_blank','noopener'); }
-    if(navigator.clipboard && window.isSecureContext){
-      navigator.clipboard.writeText(t).then(function(){
-        btn.textContent='Copiado. Agora cole no WhatsApp'; abrir();
-        setTimeout(function(){ btn.textContent='Enviar no WhatsApp'; },4000);
-      }).catch(function(){
-        var o=document.getElementById('out'); o.style.display='block'; o.value=t; o.select(); abrir();
-      });
-    } else {
+    function ok(){ btn.textContent='Copiado'; setTimeout(function(){ btn.textContent='Copiar'; },2600); }
+    function manual(){
+      var o=document.getElementById('out'); o.style.display='block'; o.value=t;
+      o.focus(); o.select(); btn.textContent='Selecione e copie';
+      o.scrollIntoView({behavior:'smooth',block:'center'});
+    }
+    if(navigator.clipboard && window.isSecureContext){ navigator.clipboard.writeText(t).then(ok).catch(manual); }
+    else {
       var o=document.getElementById('out'); o.style.display='block'; o.value=t; o.select();
-      try{ document.execCommand('copy'); }catch(e){}
-      abrir();
+      try{ document.execCommand('copy') ? ok() : manual(); }catch(e){ manual(); }
     }
   });
 
   document.getElementById('dl').addEventListener('click', function(ev){
     ev.preventDefault();
     try{
-      enviar(true);
       var b=new Blob([texto()],{type:'text/markdown;charset=utf-8'});
       var a=document.createElement('a');
       a.href=URL.createObjectURL(b); a.download='respostas-aurora-amanda.md';
@@ -376,7 +438,7 @@
     }
   });
 
-  paint();
+  paint(); pintaEstado();
 })();
 </script>
 </body>
