@@ -189,7 +189,8 @@
   </section>
 
   <div class="done">
-    <b>Terminou?</b> Toque em <b>Copiar respostas</b> aqui embaixo e cole na nossa conversa do WhatsApp. Eu leio tudo e volto com o desenho da sua Aurora e o prazo.
+    <b>Terminou?</b> Toque em <b>Enviar no WhatsApp</b> aqui embaixo. Abre a nossa conversa com as suas respostas já copiadas: é só colar e mandar. Eu leio tudo e volto com o desenho da sua Aurora e o prazo.
+    <div style="margin-top:12px;font-size:14px">Prefere guardar um arquivo? <a href="#" id="dl" style="color:var(--ink)">Salvar como .md</a></div>
   </div>
   <textarea id="out" readonly aria-label="Respostas para copiar"></textarea>
 
@@ -202,8 +203,8 @@
 <div class="bar">
   <div class="cnt"><b id="cA">0</b>/47 marcados · <b id="cB">0</b> como agora<br><span id="save">salvo automaticamente</span></div>
   <div class="acts">
-    <button class="btn" id="dl" type="button">Salvar .md</button>
-    <button class="btn primary" id="cp" type="button">Copiar respostas</button>
+    <button class="btn" id="cp" type="button">Copiar</button>
+    <button class="btn primary" id="wa" type="button">Enviar no WhatsApp</button>
   </div>
 </div>
 
@@ -339,7 +340,31 @@
     }
   });
 
-  document.getElementById('dl').addEventListener('click', function(){
+  var ZAP='5548999335671'; // WhatsApp da V3 Nexus
+  document.getElementById('wa').addEventListener('click', function(){
+    var t=texto(), btn=this;
+    enviar(true);
+    var m=document.getElementById('cA').textContent, a=document.getElementById('cB').textContent;
+    var aviso='Terminei o diagnostico da Aurora. Marquei '+m+' de 47, sendo '+a+' como agora. '+
+              'Vou colar as respostas aqui embaixo.';
+    var url='https://wa.me/'+ZAP+'?text='+encodeURIComponent(aviso);
+    function abrir(){ window.open(url,'_blank','noopener'); }
+    if(navigator.clipboard && window.isSecureContext){
+      navigator.clipboard.writeText(t).then(function(){
+        btn.textContent='Copiado. Agora cole no WhatsApp'; abrir();
+        setTimeout(function(){ btn.textContent='Enviar no WhatsApp'; },4000);
+      }).catch(function(){
+        var o=document.getElementById('out'); o.style.display='block'; o.value=t; o.select(); abrir();
+      });
+    } else {
+      var o=document.getElementById('out'); o.style.display='block'; o.value=t; o.select();
+      try{ document.execCommand('copy'); }catch(e){}
+      abrir();
+    }
+  });
+
+  document.getElementById('dl').addEventListener('click', function(ev){
+    ev.preventDefault();
     try{
       enviar(true);
       var b=new Blob([texto()],{type:'text/markdown;charset=utf-8'});
